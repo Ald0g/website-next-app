@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { Message } from "@prisma/client"; // Import the type
 
 export default async function MessageBoard() {
   const messages = await prisma.message.findMany({ orderBy: { createdAt: 'desc' } });
@@ -19,9 +20,11 @@ export default async function MessageBoard() {
         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Post</button>
       </form>
       <div className="space-y-2">
-        {messages.map((m) => (
-          <div key={m.id} className="p-3 bg-gray-100 rounded text-black">{m.text}</div>
-        ))}
+      {messages.map((m: Message) => (
+        <div key={m.id} className="p-3 bg-gray-100 rounded text-black">
+          {m.text}
+        </div>
+      ))}
       </div>
     </main>
   );
